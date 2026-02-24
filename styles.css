@@ -1,0 +1,164 @@
+/*
+  Obsidian-Fullscreen Plugin CSS
+  For more details, visit:
+  https://github.com/Oczko24/Obsidian-Fullscreen
+*/
+
+
+/* ===================== ribbon ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-ribbon="true"] .workspace-ribbon,
+body.fullscreen-plugin-active[data-fullscreen-hide-ribbon="true"] .mobile-navbar {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+
+/* ===================== tab headers ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .workspace-tab-header-container,
+body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .workspace-tab-header-inner,
+body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .view-header,
+body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .nav-header {
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+
+/* ===================== status bar ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-status="true"] .status-bar {
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+
+/* ===================== sidebars ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-sidebar="true"] .workspace-split.mod-left-split,
+body.fullscreen-plugin-active[data-fullscreen-hide-sidebar="true"] .workspace-split.mod-right-split {
+    width: 0 !important;
+    min-width: 0 !important;
+    flex-basis: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+
+/* ===================== canvas controls ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-canvas-controls="true"] .canvas-controls,
+body.fullscreen-plugin-active[data-fullscreen-hide-canvas-controls="true"] .canvas-card-menu,
+body.fullscreen-plugin-active[data-fullscreen-hide-canvas-controls="true"] .canvas-menu-container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.9) !important;
+}
+
+
+/* ===================== reveal on hover (beta) ===================== */
+
+/* Uses :has() to link ribbon & sidebar — hovering either
+   reveals both. CSS ~ selector only works forward in DOM,
+   ribbon comes BEFORE sidebar, so ~ alone was broken. */
+
+/* left panel group: hidden state (4px invisible strip) */
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"][data-fullscreen-hide-ribbon="true"] .workspace-ribbon.mod-left,
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"][data-fullscreen-hide-sidebar="true"] .workspace-split.mod-left-split {
+    pointer-events: auto !important;
+    opacity: 0 !important;
+    width: 4px !important;
+    min-width: 4px !important;
+    max-width: 4px !important;
+    overflow: hidden !important;
+    transition: opacity 0.25s ease, width 0.25s ease, min-width 0.25s ease, max-width 0.25s ease !important;
+}
+
+/* left panel group: reveal when ribbon OR sidebar is hovered */
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"]:has(.workspace-ribbon.mod-left:hover) .workspace-ribbon.mod-left,
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"]:has(.workspace-split.mod-left-split:hover) .workspace-ribbon.mod-left {
+    opacity: 1 !important;
+    width: var(--ribbon-width, 44px) !important;
+    min-width: var(--ribbon-width, 44px) !important;
+    max-width: var(--ribbon-width, 44px) !important;
+    overflow: visible !important;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"]:has(.workspace-ribbon.mod-left:hover) .workspace-split.mod-left-split,
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"]:has(.workspace-split.mod-left-split:hover) .workspace-split.mod-left-split {
+    opacity: 1 !important;
+    width: var(--sidebar-left-width, 260px) !important;
+    min-width: var(--sidebar-left-width, 260px) !important;
+    max-width: 50vw !important;
+    overflow: visible !important;
+}
+
+/* right panel group: hidden state (4px invisible strip) */
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"][data-fullscreen-hide-sidebar="true"] .workspace-split.mod-right-split {
+    pointer-events: auto !important;
+    opacity: 0 !important;
+    width: 4px !important;
+    min-width: 4px !important;
+    max-width: 4px !important;
+    overflow: hidden !important;
+    transition: opacity 0.25s ease, width 0.25s ease, min-width 0.25s ease, max-width 0.25s ease !important;
+}
+
+/* right panel group: reveal when sidebar is hovered */
+body.fullscreen-plugin-active[data-fullscreen-reveal-hover="true"]:has(.workspace-split.mod-right-split:hover) .workspace-split.mod-right-split {
+    opacity: 1 !important;
+    width: var(--sidebar-right-width, 260px) !important;
+    min-width: var(--sidebar-right-width, 260px) !important;
+    max-width: 50vw !important;
+    overflow: visible !important;
+}
+
+
+/* ===================== focus mode (beta) ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-focus-mode="true"] .cm-line:not(.cm-active) {
+    opacity: 0.3 !important;
+    filter: blur(1px);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-focus-mode="true"] .cm-line.cm-active {
+    opacity: 1 !important;
+    filter: blur(0);
+}
+
+
+/* ===================== typewriter scroll (beta) ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-typewriter="true"] .cm-scroller {
+    padding-top: 50vh !important;
+    padding-bottom: 50vh !important;
+}
+
+
+/* ===================== smooth transitions ===================== */
+
+body[data-fullscreen-transitions="true"] .workspace-ribbon,
+body[data-fullscreen-transitions="true"] .workspace-split,
+body[data-fullscreen-transitions="true"] .workspace-tab-header-container,
+body[data-fullscreen-transitions="true"] .view-header,
+body[data-fullscreen-transitions="true"] .status-bar,
+body[data-fullscreen-transitions="true"] .canvas-controls {
+    transition: width 0.2s ease-out, min-width 0.2s ease-out, height 0.2s ease-out, min-height 0.2s ease-out, flex-basis 0.2s ease-out, opacity 0.2s ease-out, padding 0.2s ease-out, margin 0.2s ease-out !important;
+}
