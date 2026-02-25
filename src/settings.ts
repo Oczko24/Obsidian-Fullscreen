@@ -17,11 +17,20 @@ export interface FullscreenPluginSettings {
 	smoothTransitions: boolean;
 	rememberFullscreen: boolean;
 	wasFullscreen: boolean;
+	/* mobile */
+	hideMobileViewTopSpacing: boolean;
+	/* visibility extras */
+	hideInlineTitle: boolean;
+	hideViewActions: boolean;
+	hideScrollbars: boolean;
+	/* advanced focus */
+	spotlightMode: boolean;
+	contentWidth: number;
 }
 
 export const DEFAULT_SETTINGS: FullscreenPluginSettings = {
 	hideRibbon: true,
-	hideTabHeaders: true,
+	hideTabHeaders: false,
 	hideSidebars: true,
 	hideStatusBar: true, /* in canvas */
 	hideCanvasControls: true,
@@ -33,6 +42,15 @@ export const DEFAULT_SETTINGS: FullscreenPluginSettings = {
 	smoothTransitions: true,
 	rememberFullscreen: false,
 	wasFullscreen: false,
+	/* mobile */
+	hideMobileViewTopSpacing: false,
+	/* visibility extras */
+	hideInlineTitle: false,
+	hideViewActions: false,
+	hideScrollbars: false,
+	/* advanced focus */
+	spotlightMode: false,
+	contentWidth: 0,
 }
 
 /* ===================== settings tab ===================== */
@@ -223,5 +241,82 @@ export class FullscreenSettingTab extends PluginSettingTab {
 					this.plugin.settings.typewriterScroll = value;
 					await this.plugin.saveSettings();
 				}));
+
+		new Setting(experimentalEl)
+			.setName('Spotlight mode')
+			.setDesc('Dims all text except the active line in the editor, or the hovered paragraph in reading mode.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.spotlightMode)
+				.onChange(async (value) => {
+					this.plugin.settings.spotlightMode = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(experimentalEl)
+			.setName('Custom content width')
+			// eslint-disable-next-line obsidianmd/ui/sentence-case
+			.setDesc('Override the max text column width when fullscreen is active. Set to 0 to use the theme default.')
+			.addSlider(slider => slider
+				.setLimits(0, 1400, 50)
+				.setValue(this.plugin.settings.contentWidth)
+				.setDynamicTooltip()
+				.onChange(async (value) => {
+					this.plugin.settings.contentWidth = value;
+					await this.plugin.saveSettings();
+				}));
+
+		/* ===================== visibility extras ===================== */
+
+		new Setting(containerEl)
+			.setHeading()
+			.setName('Extra visibility options');
+
+		new Setting(containerEl)
+			.setName('Hide inline title')
+			.setDesc('Hides the large inline note title shown at the top of the editor.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideInlineTitle)
+				.onChange(async (value) => {
+					this.plugin.settings.hideInlineTitle = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Hide view action icons')
+			.setDesc('Fades out the reading mode / search icons in the top-right of the pane. Reappear on hover.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideViewActions)
+				.onChange(async (value) => {
+					this.plugin.settings.hideViewActions = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Hide scrollbars')
+			.setDesc('Makes scrollbars invisible in the editor and reading view for a cleaner look.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideScrollbars)
+				.onChange(async (value) => {
+					this.plugin.settings.hideScrollbars = value;
+					await this.plugin.saveSettings();
+				}));
+
+		/* ===================== mobile ===================== */
+
+		if (Platform.isMobile) {
+			new Setting(containerEl)
+				.setHeading()
+				.setName('Mobile');
+
+			new Setting(containerEl)
+				.setName('Remove top spacing on phone')
+				.setDesc('When fullscreen hides the header on a phone, Obsidian adds a gap at the top of the content. This removes it.')
+				.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.hideMobileViewTopSpacing)
+					.onChange(async (value) => {
+						this.plugin.settings.hideMobileViewTopSpacing = value;
+						await this.plugin.saveSettings();
+					}));
+		}
 	}
 }

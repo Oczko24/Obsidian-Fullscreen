@@ -21,10 +21,10 @@ body.fullscreen-plugin-active[data-fullscreen-hide-ribbon="true"] .mobile-navbar
 
 /* ===================== tab headers ===================== */
 
-body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .workspace-tab-header-container,
-body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .workspace-tab-header-inner,
-body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .view-header,
-body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .nav-header {
+body.fullscreen-plugin-active.is-mobile[data-fullscreen-hide-tabs="true"] .workspace-tab-header-container,
+body.fullscreen-plugin-active.is-mobile[data-fullscreen-hide-tabs="true"] .workspace-tab-header-inner,
+body.fullscreen-plugin-active.is-mobile[data-fullscreen-hide-tabs="true"] .view-header,
+body.fullscreen-plugin-active.is-mobile[data-fullscreen-hide-tabs="true"] .nav-header {
     height: 0 !important;
     min-height: 0 !important;
     padding: 0 !important;
@@ -34,10 +34,25 @@ body.fullscreen-plugin-active[data-fullscreen-hide-tabs="true"] .nav-header {
     overflow: hidden !important;
 }
 
+/* on desktop - keep view-header (arrows + reading mode), hide only tab bar containers */
+body.fullscreen-plugin-active:not(.is-mobile)[data-fullscreen-hide-tabs="true"] .workspace-tab-header-container {
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+/* avoid overlap with OS window controls (_  []  X) on frameless desktop windows */
+body.fullscreen-plugin-active.is-hidden-frameless:not(.is-mobile) .view-header {
+    padding-right: calc(var(--frame-right-space, 0px) + 8px) !important;
+}
 
 /* ===================== status bar ===================== */
 
-body.fullscreen-plugin-active[data-fullscreen-hide-status="true"] .status-bar {
+body.fullscreen-plugin-active.is-mobile[data-fullscreen-hide-status="true"] .status-bar {
     height: 0 !important;
     min-height: 0 !important;
     padding: 0 !important;
@@ -161,4 +176,83 @@ body[data-fullscreen-transitions="true"] .view-header,
 body[data-fullscreen-transitions="true"] .status-bar,
 body[data-fullscreen-transitions="true"] .canvas-controls {
     transition: width 0.2s ease-out, min-width 0.2s ease-out, height 0.2s ease-out, min-height 0.2s ease-out, flex-basis 0.2s ease-out, opacity 0.2s ease-out, padding 0.2s ease-out, margin 0.2s ease-out !important;
+}
+
+
+/* ===================== mobile: view-content top spacing ===================== */
+
+/* on phone, when view-header is hidden, Obsidian adds margin-top via --view-top-spacing;
+   this removes it so there's no empty gap at the top of the content */
+body.fullscreen-plugin-active.is-phone[data-fullscreen-hide-mobile-top="true"] .mod-root .workspace-leaf-content .view-content {
+    margin-top: 0 !important;
+}
+
+
+/* ===================== inline title ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-inline-title="true"] .inline-title {
+    display: none !important;
+}
+
+
+/* ===================== view actions (top-right icons per pane) ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-view-actions="true"] .view-actions {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s ease !important;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-hide-view-actions="true"] .workspace-leaf:hover .view-actions {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+
+/* ===================== scrollbars ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .cm-scroller::-webkit-scrollbar,
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .markdown-preview-view::-webkit-scrollbar,
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .mod-root .workspace-leaf-content::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .cm-scroller,
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .markdown-preview-view,
+body.fullscreen-plugin-active[data-fullscreen-hide-scrollbars="true"] .mod-root .workspace-leaf-content {
+    scrollbar-width: none !important;
+}
+
+
+/* ===================== spotlight paragraph mode ===================== */
+
+/* stronger version of focus mode — dims by paragraph/block, not line */
+body.fullscreen-plugin-active[data-fullscreen-spotlight="true"] .cm-content .cm-line {
+    opacity: 0.2 !important;
+    filter: blur(0.6px);
+    transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-spotlight="true"] .cm-content:has(.cm-active) .cm-line.cm-active {
+    opacity: 1 !important;
+    filter: blur(0);
+}
+
+/* reading mode spotlight: dim all paragraphs except hovered */
+body.fullscreen-plugin-active[data-fullscreen-spotlight="true"] .markdown-preview-view>.markdown-preview-section>* {
+    opacity: 0.25;
+    transition: opacity 0.25s ease;
+}
+
+body.fullscreen-plugin-active[data-fullscreen-spotlight="true"] .markdown-preview-view>.markdown-preview-section>*:hover {
+    opacity: 1 !important;
+}
+
+
+/* ===================== custom content width ===================== */
+
+body.fullscreen-plugin-active[data-fullscreen-content-width]:not([data-fullscreen-content-width="0"]) .markdown-source-view.mod-cm6,
+body.fullscreen-plugin-active[data-fullscreen-content-width]:not([data-fullscreen-content-width="0"]) .markdown-preview-view {
+    --file-line-width: var(--fullscreen-content-width, 700px) !important;
 }
